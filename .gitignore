@@ -1,2 +1,8 @@
 node_modules
+*.log
+
 Algorithms/composites/*
+
+Modeler/composite.json.tmp
+
+front-end/node_modules

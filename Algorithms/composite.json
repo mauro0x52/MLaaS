@@ -1,0 +1,80 @@
+{
+    "name" : "Algorithm",
+    "host" : "http://localhost",
+    "properties" : {
+        "model" : {}
+    },
+    "services" : {
+        "train": {
+            "method"    : "post",
+            "path"      : "/train",
+            "bind"      : {
+                "component" : "Trainer",
+                "service"   : "train"
+            }
+        },
+        "test": {
+            "method"    : "post",
+            "path"      : "/test",
+            "bind"      : {
+                "component" : "Predictor",
+                "service"   : "test"
+            }
+        },
+        "predict": {
+            "method"    : "post",
+            "path"      : "/predict",
+            "bind"      : {
+                "component" : "Predictor",
+                "service"   : "predict"
+            }
+        }
+    },
+    "components" : {
+        "Trainer" : {
+            "host" : "http://localhost",
+            "services" : {
+                "train" : {
+                    "method" : "post",
+                    "path"   : "/train"
+                }
+            },
+            "bind" : {
+                "trainPredictor" : {
+                    "component" : "Predictor",
+                    "service"   : "train"
+                },
+                "validate" : {
+                    "component" : "Validator",
+                    "service"   : "validate"
+                }
+            }
+        },
+        "Predictor" : {
+            "host" : "http://localhost",
+            "services" : {
+                "train" : {
+                    "method" : "post",
+                    "path"   : "/train"
+                },
+                "test" : {
+                    "method" : "post",
+                    "path"   : "/test"
+                },
+                "predict" : {
+                    "method" : "post",
+                    "path"   : "/predict"
+                }
+            }
+        },
+        "Validator" : {
+            "host" : "http://localhost",
+            "services" : {
+                "validate" : {
+                    "method" : "post",
+                    "path"   : "/validate"
+                }
+            }
+        }
+    }
+}

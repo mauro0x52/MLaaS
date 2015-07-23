@@ -1,0 +1,200 @@
+{
+    "name" : "Modeler",
+    "host" : "http://localhost",
+    "port" : 20000,
+    "services" : {
+        "build" : {
+            "method"    : "post",
+            "path"      : "/model",
+            "bind"      : {
+                "component" : "Builder",
+                "service"   : "build"
+            }
+        },
+        "train" : {
+            "method"    : "post",
+            "path"      : "/model/:modelId/train",
+            "bind"      : {
+                "component" : "Learner",
+                "service"   : "train"
+            }
+        },
+        "test" : {
+            "method"    : "post",
+            "path"      : "/model/:modelId/test",
+            "bind"      : {
+                "component" : "Predictor",
+                "service"   : "test"
+            }
+        },
+        "predict" : {
+            "method"    : "post",
+            "path"      : "/model/:modelId/predict",
+            "bind"      : {
+                "component" : "Predictor",
+                "service"   : "predict"
+            }
+        },
+        "getReport" : {
+            "method"    : "get",
+            "path"      : "/report/:reportId",
+            "bind"      : {
+                "component" : "ReportsStorage",
+                "service"   : "getReport"
+            }
+        },
+        "getTest" : {
+            "method"    : "get",
+            "path"      : "/test/:testId",
+            "bind"      : {
+                "component" : "PredictionsStorage",
+                "service"   : "getTest"
+            }
+        },
+        "getPrediction" : {
+            "method"    : "get",
+            "path"      : "/prediction/:predictionId",
+            "bind"      : {
+                "component" : "PredictionsStorage",
+                "service"   : "getPrediction"
+            }
+        }
+    },
+    "components" : {
+        "Builder" : {
+            "host" : "http://localhost",
+            "port" : 20001,
+            "services" : {
+                "build" : {
+                    "method" : "post",
+                    "path"   : "/model"
+                },
+                "getStatus" : {
+                    "method" : "get",
+                    "path"   : "/model/:modelId/status"
+                }
+            },
+            "bind" : {
+                "build" : {
+                    "component" : "Algorithms",
+                    "service"   : "build"
+                }
+            }
+        },
+        "Learner" : {
+            "host" : "http://localhost",
+            "port" : 20002,
+            "services" : {
+                "train" : {
+                    "method" : "post",
+                    "path"   : "/model/:modelId/train"
+                }
+            },
+            "bind" : {
+                "train" : {
+                    "component" : "Algorithms",
+                    "service"   : "train"
+                },
+                "storeReport" : {
+                    "component" : "ReportsStorage",
+                    "service" : "storeReport"
+                }
+            }
+        },
+        "Predictor" : {
+            "host" : "http://localhost",
+            "port" : 20003,
+            "services" : {
+                "test" : {
+                    "method" : "post",
+                    "path"   : "/model/:modelId/test"
+                },
+                "predict" : {
+                    "method" : "post",
+                    "path"   : "/model/:modelId/predict"
+                }
+            },
+            "bind" : {
+                "test" : {
+                    "component" : "Algorithms",
+                    "service"   : "test"
+                },
+                "predict" : {
+                    "component" : "Algorithms",
+                    "service"   : "predict"
+                },
+                "storePrediction" : {
+                    "component" : "PredictionsStorage",
+                    "service" : "storePrediction"
+                },
+                "storeTest" : {
+                    "component" : "PredictionsStorage",
+                    "service" : "storeTest"
+                }
+            }
+        },
+        "ReportsStorage" : {
+            "host" : "http://localhost",
+            "port" : 20004,
+            "services" : {
+                "storeReport" : {
+                    "method" : "post",
+                    "path"   : "/report"
+                },
+                "getReport" : {
+                    "method" : "get",
+                    "path"   : "/report/:reportId"
+                }
+            }
+        },
+        "PredictionsStorage" : {
+            "host" : "http://localhost",
+            "port" : 20005,
+            "services" : {
+                "storePrediction" : {
+                    "method" : "post",
+                    "path"   : "/prediction"
+                },
+                "storeTest" : {
+                    "method" : "post",
+                    "path"   : "/test"
+                },
+                "getPrediction" : {
+                    "method" : "get",
+                    "path"   : "/prediction/:predictionId"
+                },
+                "getTest" : {
+                    "method" : "get",
+                    "path"   : "/test/:testId"
+                }
+            }
+        },
+        "Algorithms": {
+            "isComposite" : "true",
+            "multipleInstances": "true",
+            "instances": {},
+            "services": {
+                "build": {
+                    "method": "post",
+                    "path": "/model"
+                },
+                "train": {
+                    "method": "post",
+                    "path": "/train"
+                },
+                "test": {
+                    "method": "post",
+                    "path": "/test"
+                },
+                "predict": {
+                    "method": "post",
+                    "path": "/predict"
+                },
+                "status": {
+                    "method": "get",
+                    "path": "/status"
+                }
+            }
+        }
+    }
+}

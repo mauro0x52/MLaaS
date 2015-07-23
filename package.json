@@ -1,7 +1,7 @@
 {
   "name": "mlaas",
   "description": "A machine learning PaaS (Platform as a Service) built on top of Node.js.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "contributors": [
     "Mauro Ribeiro <mauro0x52@gmail.com>"
   ],
@@ -10,5 +10,10 @@
     "type": "git",
     "url": "https://github.com/mauro0x52/mlaas.js"
   },
-  "author": "Mauro Ribeiro"
+  "author": "Mauro Ribeiro",
+  "dependencies": {
+    "node-svm": "2.1.5",
+    "sca.js": "0.1.0",
+    "synaptic": "1.0.1"
+  }
 }
