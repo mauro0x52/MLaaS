@@ -1,0 +1,195 @@
+<!doctype html>
+<html ng-app="panel">
+	<head>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		<script src="http://code.highcharts.com/4.1.6/highcharts.js"></script>
+		<script src="js/panel.js"></script>
+		<link rel="stylesheet" href="css/panel.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	</head>
+	<body ng-controller="panel">
+		<div class="mlaas-panel">
+            <!-- BEGIN HEADER -->
+            <nav class="navbar navbar-default navbar-fixed-top">
+              <div class="container">
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <div class="navbar-brand"><img src="images/logo.png" /></div>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                  <ul class="nav navbar-nav navbar-right">
+                    <li ng-class="{active : tab == 'models'}"><a ng-click="tab = 'models'">models</a></li>
+                    <li ng-class="{active : tab == 'train'}"><a ng-click="tab = 'train'">train</a></li>
+                    <li ng-class="{active : tab == 'test'}"><a ng-click="tab = 'test'">test</a></li>
+                    <li ng-class="{active : tab == 'predict'}"><a ng-click="tab = 'predict'">predict</a></li>
+                    <li ng-class="{active : tab == 'summary'}"><a ng-click="tab = 'summary'">summary</a></li>
+                  </ul>
+                </div>
+              </div>
+            </nav>
+            <!-- END MENU -->
+            <!-- BEGIN CONTENT -->
+            <div class="content container">                
+                <h1 class="title">{{tab}}</h1>
+                
+                <!-- BEGIN COLS -->   
+                <div class="row">
+                    <!-- BEGIN LEFT COL -->
+                    <div class="col-md-8" ng-show="tab == 'train' || tab == 'test' || tab == 'predict'">
+                        <!-- BEGIN TRAINING SET FORM -->
+                        <div class="training-set-form" ng-show="tab == 'train'">
+                            <h2>Training-set</h2>
+                            <div class="form-group">
+                                <textarea id="setTrainingSet" ng-model="forms.trainingSet" class="form-control" rows="12" ng-disabled="!state.trainingSet.edit"></textarea>
+                            </div>
+                            <div class="submit text-right">
+                                <button class="btn btn-default" ng-click="editTrainingSet()" ng-show="!state.trainingSet.edit">edit training-set</button>
+                                <button class="btn btn-primary" ng-click="setTrainingSet()" ng-show="state.trainingSet.edit">set training-set</button>
+                            </div>
+                        </div>
+                        <!-- END TRAINING SET FORM -->
+                        
+                        <!-- BEGIN PREDICTOR SET FORM -->
+                        <div class="predictor-set-form" ng-show="tab == 'predict'">
+                            <h2>Predictor-set</h2>
+                            <div class="form-group">
+                                <textarea id="setPredictorSet" ng-model="forms.predictorSet" class="form-control" rows="12" ng-disabled="!state.predictorSet.edit"></textarea>
+                            </div>
+                            <div class="submit text-right">
+                                <button class="btn btn-default" ng-click="editPredictorSet()" ng-show="!state.predictorSet.edit">edit predictor-set</button>
+                                <button class="btn btn-primary" ng-click="setPredictorSet()" ng-show="state.predictorSet.edit">set predictor-set</button>
+                            </div>
+                        </div>
+                        <!-- END PREDICTOR SET FORM -->
+                        
+                        <!-- BEGIN TEST SET FORM -->
+                        <div class="test-set-form" ng-show="tab == 'test'">
+                            <h2>Test-set</h2>
+                            <div class="form-group">
+                                <textarea id="setTestSet" ng-model="forms.testSet" class="form-control" rows="12" ng-disabled="!state.testSet.edit"></textarea>
+                            </div>
+                            <div class="submit text-right">
+                                <button type="submit" class="btn btn-default" ng-click="editTestSet()" ng-show="!state.testSet.edit">edit test-set</button>
+                                <button type="submit" class="btn btn-primary" ng-click="setTestSet()" ng-show="state.testSet.edit">set test-set</button>
+                            </div>
+                        </div>
+                        <!-- END TEST SET FORM -->
+                    </div>
+                    <!-- END LEFT COL -->
+                    <!-- BEGIN RIGHT COL -->
+                    
+                    <div ng-class="{'col-md-12' : tab ==  'models' || tab == 'summary', 'col-md-4' : tab ==  'train' || tab == 'test' || tab == 'predict'}">
+                        <!-- BEGIN MODELS -->
+                        <div class="models" ng-show="models.length > 0 && (tab == 'models' || tab == 'train' || tab == 'test' || tab == 'predict')">
+                            <h2>Created models</h2>
+                            <table class="table">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th ng-show="tab == 'models'">Algorithm</th>
+                                    <th ng-show="tab == 'models'">Parameters</th>
+                                    <th>Status</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                                <tr ng-repeat="model in models">
+                                    <td>{{model.modelId}}</td>
+                                    <td>{{model.name}}</td>
+                                    <td ng-show="tab == 'models'">{{model.algorithm}}</td>
+                                    <td ng-show="tab == 'models'">{{model.parameters}}</td>
+                                    <td>{{model.status}}</td>
+                                    <td class="text-right">
+                                        <button class="btn btn-sm btn-danger" ng-click="remove(model)" ng-show="tab == 'models'" ng-disabled="">remove</button>
+                                        <button class="btn btn-sm btn-primary" ng-click="train(model)" ng-show="tab == 'train'" ng-disabled="model.status !== 'ready' || state.trainingSet.edit">train</button>
+                                        <button class="btn btn-sm btn-primary" ng-click="test(model)" ng-show="tab == 'test'" ng-disabled="model.status !== 'trained' || state.testSet.edit">test</button>
+                                        <button class="btn btn-sm btn-primary" ng-click="predict(model)" ng-show="tab == 'predict'" ng-disabled="model.status !== 'trained' || state.predictorSet.edit">predict</button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <!-- END MODELS -->
+                                        
+                        <!-- BEGIN MENU -->
+                        <div class="menu text-right">
+                            <button class="btn btn-success" ng-click="state.model.add = true" ng-show="tab == 'models' && !state.model.add">add model</button>
+                            <button class="btn btn-success" ng-click="trainAll()" ng-show="models.length > 0 && tab == 'train'" ng-disabled="findModel('status', 'ready') == false || state.trainingSet.edit">train all</button>
+                            <button class="btn btn-success" ng-click="testAll()" ng-show="models.length > 0 && tab == 'test'" ng-disabled="findModel('status', 'trained') == false || state.testSet.edit">test all</button>
+                            <button class="btn btn-success" ng-click="predictAll()" ng-show="models.length > 0 && tab == 'predict'" ng-disabled="findModel('status', 'trained') == false  || state.predictorSet.edit">predict all</button>
+                        </div>
+                        <!-- END MENU -->
+                
+                        <!-- BEGIN ADD MODEL -->
+                        <div class="add-model" ng-show="tab == 'models' && state.model.add">              
+                            <h2>Add a new model</h2>      
+                            <div class="form-group">
+                                <p>Templates: <a ng-click="loadModelInput('mlp')">MLP</a>, <a ng-click="loadModelInput('svr')">SVR</a>, <a ng-click="loadModelInput('knn')">KNN</a></p>
+                                <textarea id="addModel" ng-model="forms.model" class="form-control" rows="12"></textarea>
+                            </div>
+                            <div class="submit text-right"><button class="btn btn-primary" ng-click="addModel();">add Model</button></div>
+                        </div>
+                        <!-- END ADD MODEL -->
+                    </div>
+                    <!-- END RIGHT COL -->                   
+                </div>
+                <!-- END COLS -->       
+                
+                
+                <!-- BEGIN CHARTS -->
+                <div class="charts" ng-show="state.trainingSet.executed && tab == 'train' || state.testSet.executed && tab == 'test' || state.predictorSet.executed && tab == 'predict' || tab == 'summary'">
+                    <!-- BEGIN TRAIN CHARTS -->
+                    <div class="train-charts" ng-show="state.trainingSet.executed && (tab == 'train' || tab == 'summary')">
+                        <h2>Validation Charts</h2>
+                        <h3>Validation Reports</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div id="train-mean-chart" style="min-width: 100px; height: 200px; margin: 0 auto"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="train-mse-chart" style="min-width: 100px; height: 200px; margin: 0 auto"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="train-time-chart" style="min-width: 100px; height: 200px; margin: 0 auto"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END TRAIN CHARTS -->
+                    <!-- BEGIN TEST CHARTS -->
+                    <div class="test-charts" ng-show="state.testSet.executed && (tab == 'test' || tab == 'summary')">
+                        <h2>Test Charts</h2>
+                        <h3>Test Reports</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div id="test-mean-chart" style="min-width: 100px; height: 200px; margin: 0 auto"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="test-mse-chart" style="min-width: 100px; height: 200px; margin: 0 auto"></div>
+                            </div>
+                            <div class="col-md-4">
+                                <div id="test-time-chart" style="min-width: 100px; height: 200px; margin: 0 auto"></div>
+                            </div>
+                        </div>
+                        <h3>Test Results</h3>
+                        <div id="test-linechart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                    <!-- END TEST CHARTS -->
+                    <!-- BEGIN PREDICTION CHARTS -->
+                    <div class="prediction-charts" ng-show="state.predictorSet.executed && (tab == 'predict' || tab == 'summary')">
+                        <h2>Prediction Chart</h2>
+                        <h3>Prediction Results</h3>
+                        <div id="prediction-linechart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                    <!-- END PREDICTION CHARTS -->
+                </div>
+                <!-- END CHARTS -->
+                
+            </div>
+            <!-- END CONTENT -->
+		</div>
+	</body>
+</html>

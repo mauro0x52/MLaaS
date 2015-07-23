@@ -1,0 +1,42 @@
+a {
+    cursor: pointer;
+}
+
+.mlaas-panel {
+    margin: 50px 20px 20px 20px;
+}
+
+.title {
+    text-transform: capitalize;
+}
+
+h1 {
+    font-size: 26px !important;
+}
+
+h2 {   
+    background-color: #ddd;
+    font-size: 18px !important;
+    margin: 10px 0 !important;
+    padding: 10px;
+}
+
+h3 {
+    background-color: #eee;
+    font-size: 16px !important;
+    margin: 10px 0 !important;
+    padding: 5px 10px;
+}
+
+.charts h2 {
+    margin: 10px 0 0 0 !important;
+}
+
+.charts h3 {
+    margin: 0 0 10px 0 !important;
+}
+
+.navbar-brand {
+    margin-top: -7px;
+    margin-left: -10px;
+}
