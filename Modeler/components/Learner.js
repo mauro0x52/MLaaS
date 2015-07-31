@@ -6,7 +6,7 @@
  * @since   2015-07-17
  */
 
-var SCA = require('sca.js');
+var SCA = require('service-component');
 var Learner = new SCA.Component('Learner', '../composite.json.tmp');
 
 var countReports = 0;

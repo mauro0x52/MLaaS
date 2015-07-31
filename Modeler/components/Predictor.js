@@ -6,7 +6,7 @@
  * @since   2015-07-17
  */
 
-var SCA = require('sca.js');
+var SCA = require('service-component');
 var Predictor = new SCA.Component('Predictor', '../composite.json.tmp');
 
 var countPredictions = 0;

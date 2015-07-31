@@ -18,7 +18,7 @@ app.controller('panel', function ($scope, $http) {
 	}
     
 	$scope.forms = {
-		model : angular.copy($scope.algorithms.mlp),
+		model : angular.copy($scope.algorithms.knn),
 		trainingSet : angular.toJson({ "data" : [], "results" : [] }, true),
 		testSet : angular.toJson({ "data" : [], "results" : [] }, true),
 		predictorSet : angular.toJson({ "data" : [] }, true)

@@ -128,7 +128,7 @@
                         <div class="add-model" ng-show="tab == 'models' && state.model.add">              
                             <h2>Add a new model</h2>      
                             <div class="form-group">
-                                <p>Templates: <a ng-click="loadModelInput('mlp')">MLP</a>, <a ng-click="loadModelInput('svr')">SVR</a>, <a ng-click="loadModelInput('knn')">KNN</a></p>
+                                <p>Templates: <a ng-click="loadModelInput('knn')">KNN</a>, <a ng-click="loadModelInput('mlp')">MLP</a>, <a ng-click="loadModelInput('svr')">SVR</a></p>
                                 <textarea id="addModel" ng-model="forms.model" class="form-control" rows="12"></textarea>
                             </div>
                             <div class="submit text-right"><button class="btn btn-primary" ng-click="addModel();">add Model</button></div>
@@ -147,13 +147,13 @@
                         <h2>Validation Charts</h2>
                         <h3>Validation Reports</h3>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-sm-4">
                                 <div id="train-mean-chart" style="min-width: 100px; height: 200px; margin: 0 auto"></div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-sm-4">
                                 <div id="train-mse-chart" style="min-width: 100px; height: 200px; margin: 0 auto"></div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-sm-4">
                                 <div id="train-time-chart" style="min-width: 100px; height: 200px; margin: 0 auto"></div>
                             </div>
                         </div>
@@ -164,25 +164,25 @@
                         <h2>Test Charts</h2>
                         <h3>Test Reports</h3>
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-sm-4">
                                 <div id="test-mean-chart" style="min-width: 100px; height: 200px; margin: 0 auto"></div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-sm-4">
                                 <div id="test-mse-chart" style="min-width: 100px; height: 200px; margin: 0 auto"></div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-sm-4">
                                 <div id="test-time-chart" style="min-width: 100px; height: 200px; margin: 0 auto"></div>
                             </div>
                         </div>
                         <h3>Test Results</h3>
-                        <div id="test-linechart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                        <div id="test-linechart" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
                     </div>
                     <!-- END TEST CHARTS -->
                     <!-- BEGIN PREDICTION CHARTS -->
                     <div class="prediction-charts" ng-show="state.predictorSet.executed && (tab == 'predict' || tab == 'summary')">
                         <h2>Prediction Chart</h2>
                         <h3>Prediction Results</h3>
-                        <div id="prediction-linechart" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                        <div id="prediction-linechart" style="min-width: 310px; height: 300px; margin: 0 auto"></div>
                     </div>
                     <!-- END PREDICTION CHARTS -->
                 </div>

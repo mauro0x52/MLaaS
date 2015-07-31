@@ -6,7 +6,7 @@
  * @since   2015-07-17
  */
 
-var SCA = require('sca.js');
+var SCA = require('service-component');
 var fs = require('fs');
 var fork = require('child_process').fork;
 var Builder = new SCA.Component('Builder', '../composite.json.tmp');

@@ -6,7 +6,7 @@
  * @since   2015-07-17
  */
 
-var SCA = require('sca.js');
+var SCA = require('service-component');
 var Validator = new SCA.Component('Validator', __dirname + '/../composites/model-'+process.argv[2]+'.json');
 var Algorithm = require('../algorithms/Algorithm.js');
 var algorithm = new Algorithm(Validator);
