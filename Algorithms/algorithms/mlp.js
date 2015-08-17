@@ -77,58 +77,8 @@ Mlp.prototype.train = function (trainingSet, cb) {
     }	
 }
 
-	
-Mlp.prototype.validate = function (originalTrainingSet, cb) {
-    this.build(originalTrainingSet.data[0].length);
-    trainingSet = this.normalize(originalTrainingSet);
-    
-	var dataLength = trainingSet.length;
-	var foldLength = parseInt(trainingSet.length / this.options.folds);
-	var validation = [];
-	var start = new Date().getTime(); 
-	
-	for (var i = 0; i < this.options.folds; i++) {
-		var trainingSetClone = trainingSet.slice(0);	
-		var dataFold = trainingSetClone.splice(i * foldLength, foldLength);
-		var trainer = new Trainer(this.perceptron, this.options);
-		trainer.train(trainingSetClone, this.options);
-		for (var j in dataFold) {
-			validation.push({real : dataFold[j].output[0], predicted : this.perceptron.activate(dataFold[j].input)[0]});
-		}
-	}
-		
-	var sum = parseFloat(0);
-	var sumsq = parseFloat(0);
-	for (var i in validation) {
-		var error = Math.abs(validation[i].real - validation[i].predicted);
-		error = error * (this.normalization.output.max - this.normalization.output.min) + this.normalization.output.min;
-		var sq = parseFloat(error * error);
-		sum += error;
-		sumsq += sq;
-	}
-	var report = { 
-        errors : {
-            mse : sumsq/dataLength,
-            std : Math.sqrt(sumsq/dataLength),
-            mean : sum/dataLength
-        },
-		size : dataLength,
-		time : {
-            total : new Date().getTime() - start,
-            avg : (new Date().getTime()) - start / dataLength
-        }
-	};
-        
-    if (cb) {
-        cb(report);
-    } else {
-        return report;
-    }	
-}
 
 Mlp.prototype.predict = function (predictorSet, cb) {	
-	var start = new Date().getTime();
-	
 	var predictors = predictorSet.data;
 	var results = [];
 	
@@ -142,52 +92,13 @@ Mlp.prototype.predict = function (predictorSet, cb) {
 		results.push(this.perceptron.activate(predictors[i])[0] * (this.normalization.output.max - this.normalization.output.min) + this.normalization.output.min);	
 	}
 	
-    var end = new Date().getTime();
-    
-    var prediction = {
-        results : results,
-        size : results.length,
-        time : {
-            total : end - start,
-            avg : (end - start) / predictorSet.data.length 
-        }
-    }
-    	
     if (cb) {
-        cb(prediction);
+        cb(results);
     } else {
-        return prediction;
+        return results;
     }	
 }
 
-
-Mlp.prototype.test = function (testSet, cb) {
-    var test = this.predict(testSet);
-    
-    var sum = parseFloat(0);
-    var sumsq = parseFloat(0);
-    var dataLength = testSet.data.length;
-    
-    for (var i in test.results) {
-        var error = Math.abs(test.results[i] - testSet.results[i]);
-        var sq = parseFloat(error * error);
-        sum += error;
-        sumsq += sq;
-    }
-    
-    test.errors = { 
-        mse : sumsq/dataLength,
-        std : Math.sqrt(sumsq/dataLength),
-        mean : sum/dataLength
-    };
-    
-        
-    if (cb) {
-        cb(test);
-    } else {
-        return test;
-    }
-}
 
 module.exports = Mlp;
 

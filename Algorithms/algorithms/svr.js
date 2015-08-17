@@ -57,55 +57,16 @@ Svr.prototype.validate = function (originalTrainingSet, cb) {
 }
 
 Svr.prototype.predict = function (trainingSet, cb) {
-	var start = new Date().getTime();
     var results = [];
     
     for (var i in trainingSet.data) {
         results.push(this.svm.predictSync(trainingSet.data[i]));
     }
     
-    var end = new Date().getTime();
-    
-    var prediction = {
-        results : results,
-        time : {
-            total : end - start,
-            avg : (end - start) / trainingSet.data.length
-        },
-        size : trainingSet.data.length
-    }
-    
     if (cb)
-        cb(prediction);
+        cb(results);
     else
-        return prediction;
-}
-
-
-Svr.prototype.test = function (testSet, cb) {
-    var test = this.predict(testSet);
-    
-    var sum = parseFloat(0);
-    var sumsq = parseFloat(0);
-    var dataLength = testSet.data.length;
-    
-    for (var i in test.results) {
-        var error = Math.abs(test.results[i] - testSet.results[i]);
-        var sq = parseFloat(error * error);
-        sum += error;
-        sumsq += sq;
-    }
-    
-    test.errors = { 
-        mse : sumsq/dataLength,
-        std : Math.sqrt(sumsq/dataLength),
-        mean : sum/dataLength
-    };
-    
-    if (cb)
-        cb(test);
-    else
-        return test;
+        return results;
 }
 
 module.exports = Svr;

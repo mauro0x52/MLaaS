@@ -9,7 +9,7 @@
 var SCA = require('service-component');
 var Validator = new SCA.Component('Validator', __dirname + '/../composites/model-'+process.argv[2]+'.json');
 var Algorithm = require('../algorithms/Algorithm.js');
-var algorithm = new Algorithm(Validator);
+var algorithm = new Algorithm(Validator.artifacts.getProperty('model'));
 
 /**
  * Validate the model

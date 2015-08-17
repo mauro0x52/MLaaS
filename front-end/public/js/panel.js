@@ -12,8 +12,8 @@ app.controller('panel', function ($scope, $http) {
     $scope.models = [];
         
 	$scope.algorithms = {
-		mlp : angular.toJson({ name : 'MLP', algorithm : 'mlp', parameters : {layers : [12, 14, 1], rate : 0.1, iterations : 1000, error: 0.0001}}, true),
-		knn : angular.toJson({ name : 'KNN', algorithm : 'knn', parameters : {k : 10, maxDistance : 2, weightFunctionSigma : 100, weights : [1,4,4,7,1,1,4,7,4,4,5,4]}}, true),
+		mlp : angular.toJson({ name : 'MLP', algorithm : 'mlp', parameters : {layers : [5, 10, 1], rate : 0.1, iterations : 1000, error: 0.0001}}, true),
+		knn : angular.toJson({ name : 'KNN', algorithm : 'knn', parameters : {k : 10, maxDistance : 2, weightFunctionSigma : 100, weights : [1,1,1,1,1]}}, true),
 		svr : angular.toJson({ name : 'SVR', algorithm : 'svr', parameters : {gamma : [0.125, 0.5, 1], c : [8, 16, 32], epsilon : [0.001, 0.125, 0.5], retainedVariance : 0.995,}}, true)
 	}
     
